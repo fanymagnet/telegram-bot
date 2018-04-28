@@ -2,6 +2,7 @@
     require(__DIR__ . '/TelegramBot.class.php');
     require(__DIR__ . '/GitLabTelegramBot.class.php');
     require(__DIR__ . '/RandomPhotoTelegramBot.class.php');
+    require(__DIR__ . '/RandomAnegdotTelegramBot.class.php');
 
     $dataMessage = file_get_contents('php://input');
 
@@ -25,7 +26,13 @@
             (new RandomPhotoTelegramBot(@$_GET['secretToken']))
                 ->createRequest(@$_GET['chatId'])
                 ->sendPhoto();
-            break;
+        break;
+
+        case 'RandomAnegdot':
+            (new RandomAnegdotTelegramBot(@$_GET['secretToken']))
+                ->createMessage()
+                ->sendMessage();
+        break;
 
         default:
             TelegramBot::writeLog('Ошибка! Неизвестный тип события!', TRUE);
