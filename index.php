@@ -2,7 +2,7 @@
     require(__DIR__ . '/TelegramBot.class.php');
     require(__DIR__ . '/GitLabTelegramBot.class.php');
     require(__DIR__ . '/RandomPhotoTelegramBot.class.php');
-    require(__DIR__ . '/RandomAnegdotTelegramBot.class.php');
+    require(__DIR__ . '/RandomAnekdotTelegramBot.class.php');
 
     $dataMessage = file_get_contents('php://input');
 
@@ -28,9 +28,10 @@
                 ->sendPhoto();
         break;
 
-        case 'RandomAnegdot':
-            (new RandomAnegdotTelegramBot(@$_GET['secretToken']))
+        case 'RandomAnekdot':
+            (new RandomAnekdotTelegramBot(@$_GET['secretToken']))
                 ->createMessage()
+                ->createRequest(@$_GET['chatId'])
                 ->sendMessage();
         break;
 
