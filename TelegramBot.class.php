@@ -143,12 +143,13 @@
             curl_setopt($curlHandle, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
 
             $exec = curl_exec($curlHandle);
+            $error = curl_error($curlHandle);
+
+            curl_close($curlHandle);
 
             if($exec === FALSE)
             {
-                $errorDescription = curl_error($curlHandle);
-
-                self::writeLog($errorDescription);
+                self::writeLog($error);
             }
 
             return $exec;
