@@ -6,7 +6,7 @@
             $request = array(
                 'chat_id' => $chatId,
                 // Для того чтобы фото быо разное надо прикручивать к ссылке случайный хэш. Иначе фото шлется одно и то же.
-                'photo' => 'http://thecatapi.com/api/images/get' /*. sha1(uniqid(microtime(TRUE), TRUE))*/
+                'photo' => 'http://thecatapi.com/api/images/get?hash=' . sha1(uniqid(microtime(TRUE), TRUE))
             );
 
             $request = json_encode($request);
