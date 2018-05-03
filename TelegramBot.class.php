@@ -24,7 +24,7 @@
         /**
          * Токен бота.
          */
-        const TELEGRAM_TOKEN = '577130787:AAEH0Z_pojwA3lae5yGsXeS9GPYm5WLkcQI';
+        const TELEGRAM_TOKEN = '594202943:AAHNkao_EyNsUKzcqAq4ZQ3Wwu9106GUYV0';
 
         /**
          * Опредляет активность прокси при отправке запросов.
