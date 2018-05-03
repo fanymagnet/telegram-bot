@@ -5,7 +5,7 @@
         {
             $request = array(
                 'chat_id' => $chatId,
-                // Для того чтобы фото быо разное надо прикручивать к ссылке случайный хэш. Иначе фото шлется одно и то же.
+                // Для того чтобы фото было разное надо прикручивать к ссылке случайный хэш. Иначе фото шлется одно и то же.
                 'photo' => 'http://thecatapi.com/api/images/get?api_key=MzA3NzE0&random_hash=' . sha1(uniqid(microtime(TRUE), TRUE))
             );
 
@@ -20,7 +20,12 @@
         {
             $request = $this->getRequest();
 
-            $this->sendRequest($request, 'sendPhoto');
+            if(empty($request) == TRUE)
+            {
+                self::writeLog('Ошибка! Запрос еще не сформирован!', TRUE);
+            }
+
+            return $this->sendRequest($request, 'sendPhoto');
         }
     }
 ?>

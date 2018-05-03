@@ -108,6 +108,7 @@
             );
 
             $request = json_encode($request);
+
             $request = str_replace('<br>', '\n', $request);
 
             $this->setRequest($request);
@@ -155,14 +156,15 @@
             return $exec;
         }
 
-        public static function writeLog($message, $exception = FALSE)
+        public static function writeLog($message, $exit = FALSE)
         {
             $message = date('Y-m-d H:i:s') . ' - ' . trim($message) . "\n";
+
             file_put_contents(self::LOG_FILE, $message, FILE_APPEND);
 
-            if ($exception == TRUE)
+            if ($exit == TRUE)
             {
-                throw new Exception($message);
+                exit($message);
             }
         }
     }
