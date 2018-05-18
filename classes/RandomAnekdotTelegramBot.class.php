@@ -1,5 +1,5 @@
 <?php
-    namespace app;
+    namespace classes;
 
     class RandomAnekdotTelegramBot extends TelegramBot
     {

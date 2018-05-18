@@ -1,5 +1,5 @@
 <?php
-    namespace app;
+    namespace classes;
 
     class GitLabTelegramBot extends TelegramBot
     {
