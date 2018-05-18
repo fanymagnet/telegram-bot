@@ -1,4 +1,5 @@
 <?php
+    // Автозагрузчик классов
     spl_autoload_register(function($className) {
         include __DIR__. DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.class.php';
     });
