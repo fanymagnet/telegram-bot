@@ -36,7 +36,7 @@
 
             if ($dataMessage["total_commits_count"] != 0)
             {
-                $messages[] = 'Новый Commit!';
+                $messages[] = '<b>Новый Commit!</b>';
 
                 $commits = $dataMessage["commits"];
                 $branch = preg_match('/.*\/(.*)$/', $dataMessage["ref"], $branch) == 0
@@ -48,7 +48,7 @@
                     $messages[] = '<b>Автор:</b> ' . trim($commits[$i]["author"]["name"]) . '<br>' .
                         '<b>Ветка:</b> ' . trim($branch) . '<br>' .
                         '<b>Описание:</b> ' . trim($commits[$i]["message"]) . '<br>' .
-                        '<a href="' . trim($commits[$i]["url"]) . '">Просмотреть изменения</a>';
+                        '<br><a href="' . trim($commits[$i]["url"]) . '">Просмотреть изменения</a>';
                 }
             }
 
@@ -65,11 +65,11 @@
             {
                 $merge = $dataMessage["object_attributes"];
 
-                $message = '<b>Новый Merge Request!</b><br>' .
+                $message = '<b>Новый Merge Request!</b><br><br>' .
                     '<b>Автор:</b> ' . trim($merge["last_commit"]["author"]["name"]) . '<br>' .
                     '<b>Ветки:</b> ' . trim($dataMessage["object_attributes"]["source_branch"]) . ' <b>в</b> ' . trim($dataMessage["object_attributes"]["target_branch"]) . '<br>' .
                     '<b>Описание:</b> ' . trim($merge["title"]) . '<br>' .
-                    '<a href="' . trim($dataMessage["repository"]["homepage"]) . '/merge_requests/' . trim($merge["iid"]) . '">Просмотреть изменения</a>';
+                    '<br><a href="' . trim($dataMessage["repository"]["homepage"]) . '/merge_requests/' . trim($merge["iid"]) . '">Просмотреть изменения</a>';
             }
 
             $this->setMessage($message);
