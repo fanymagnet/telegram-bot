@@ -1,4 +1,6 @@
 <?php
+    namespace app;
+
     class RandomPhotoTelegramBot extends TelegramBot
     {
         public function createRequest($chatId)

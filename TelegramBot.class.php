@@ -1,4 +1,6 @@
 <?php
+    namespace app;
+
     class TelegramBot
     {
         /**
@@ -7,7 +9,7 @@
         private $_message;
 
         /**
-         * @var Сформированный TelegramBot запрос к боту.
+         * @var TelegramBot Сформированный запрос к боту.
          */
         private $_request;
 

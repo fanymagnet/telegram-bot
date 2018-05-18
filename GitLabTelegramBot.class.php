@@ -1,23 +1,25 @@
 <?php
+    namespace app;
+
     class GitLabTelegramBot extends TelegramBot
     {
-        public function createMessage($dataMessage, $gitlabEvent)
+        public function createMessage($dataMessage)
         {
-            if(empty($dataMessage) == TRUE)
+            if(empty($dataMessage['phpInput']) == TRUE || empty($dataMessage['gitlabEvent']) == TRUE)
             {
                 self::writeLog('Ошибка! В программу не переданы входящие данные!', TRUE);
             }
 
-            $dataMessage = json_decode($dataMessage, TRUE);
+            $dataMessage['phpInput'] = json_decode($dataMessage['phpInput'], TRUE);
 
-            switch($gitlabEvent)
+            switch($dataMessage['gitlabEvent'])
             {
                 case 'Push Hook':
-                    $this->createPushHookMessage($dataMessage);
+                    $this->createPushHookMessage($dataMessage['phpInput']);
                 break;
 
                 case 'Merge Request Hook':
-                    $this->createMergeRequestHookMessage($dataMessage);
+                    $this->createMergeRequestHookMessage($dataMessage['phpInput']);
                 break;
 
                 default:
@@ -61,9 +63,9 @@
             {
                 $merge = $dataMessage["object_attributes"];
 
-                $message = '<b>' . trim($merge["last_commit"]["author"]["name"]) . '</b><br>' .
-                    'Запрос объеденения: ' . trim($merge["iid"]) . '<br>' .
-                    '<i>' . trim($dataMessage["object_attributes"]["source_branch"]) . ' >>> ' . trim($dataMessage["object_attributes"]["target_branch"]) . '</i><br>' .
+                $message = '<b>Автор:</b> ' . trim($merge["last_commit"]["author"]["name"]) . '<br>' .
+                    '<b>Запрос объеденения:</b> ' . trim($merge["iid"]) . '<br>' .
+                    '<b>Ветки:</b> ' . trim($dataMessage["object_attributes"]["source_branch"]) . ' <b>в</b> ' . trim($dataMessage["object_attributes"]["target_branch"]) . '<br>' .
                     '<br>' . trim($merge["title"]) . '<br>' .
                     '<br><a href="' . trim($dataMessage["repository"]["homepage"]) . '/merge_requests/' . trim($merge["iid"]) . '">Просмотреть изменения</a>';
             }
