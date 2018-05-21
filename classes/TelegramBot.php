@@ -43,7 +43,7 @@
          */
         const CURL_PROXY_URL = 'socks5://10.101.1.243:9050';
 
-        public function __construct($data)
+        public function __construct($data = [])
         {
             if (empty($data['secretToken']) == TRUE)
             {
@@ -66,26 +66,24 @@
             return $this->sendRequest($this->getRequest(), 'sendPhoto');
         }
 
-        public function createMessage($data)
+        public function createMessage($data = [])
         {
-            if(empty($data) == TRUE)
+            if(empty($data['text']) == TRUE)
             {
                 self::writeLog('Ошибка! В программу не переданы входящие данные!', TRUE);
             }
 
-            $this->setMessage('Это тестовое сообщение!');
-
-            return $this;
+            return $this->setMessage($data['text']);
         }
 
-        protected function setMessage($value)
+        public function setMessage($value)
         {
             $this->_message = $value;
 
             return $this;
         }
 
-        protected function getMessage()
+        public function getMessage()
         {
             if(empty($this->_message) == TRUE)
             {
@@ -95,7 +93,7 @@
             return $this->_message;
         }
 
-        public function createRequest($data)
+        public function createRequest($data = [])
         {
             if(empty($data['chatId']) == TRUE)
             {
@@ -113,19 +111,17 @@
             $request = json_encode($request);
             $request = str_replace('<br>', '\n', $request);
 
-            $this->setRequest($request);
-
-            return $this;
+            return $this->setRequest($request);
         }
 
-        protected function setRequest($value)
+        public function setRequest($value)
         {
             $this->_request = $value;
 
             return $this;
         }
 
-        protected function getRequest()
+        public function getRequest()
         {
             if(empty($this->_request) == TRUE)
             {
@@ -135,7 +131,7 @@
             return $this->_request;
         }
 
-        protected function sendRequest($request, $method)
+        public function sendRequest($request, $method)
         {
             // В hosts-файле обязательно прописать соответсвие api.telegram.org IP адресу
             $curlHandle = curl_init('https://api.telegram.org/bot' . self::TELEGRAM_TOKEN . '/' . $method);

@@ -3,7 +3,7 @@
 
     class GitLabTelegramBot extends TelegramBot
     {
-        public function createMessage($data)
+        public function createMessage($data = [])
         {
             if(empty($data['phpInput']) == TRUE || empty($data['gitlabEvent']) == TRUE)
             {
@@ -15,17 +15,13 @@
             switch($data['gitlabEvent'])
             {
                 case 'Push Hook':
-                    $this->createPushHookMessage($data['phpInput']);
-                break;
+                    return $this->createPushHookMessage($data['phpInput']);
 
                 case 'Merge Request Hook':
-                    $this->createMergeRequestHookMessage($data['phpInput']);
-                break;
-
-                default:
-                    self::writeLog('Ошибка! Неизвестный тип события GitLab!', TRUE);
-                break;
+                    return $this->createMergeRequestHookMessage($data['phpInput']);
             }
+
+            self::writeLog('Ошибка! Неизвестный тип события GitLab!', TRUE);
 
             return $this;
         }
@@ -54,7 +50,7 @@
 
             $message = implode('<br><br>', $messages);
 
-            $this->setMessage($message);
+            return $this->setMessage($message);
         }
 
         private function createMergeRequestHookMessage($data)
@@ -72,7 +68,7 @@
                     '<br><a href="' . trim($data["repository"]["homepage"]) . '/merge_requests/' . trim($merge["iid"]) . '">Просмотреть изменения</a>';
             }
 
-            $this->setMessage($message);
+            return $this->setMessage($message);
         }
     }
 ?>

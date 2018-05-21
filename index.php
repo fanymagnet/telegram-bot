@@ -18,7 +18,7 @@
                 ])
             )
                 ->createMessage([
-                    'phpInput' => file_get_contents('php://input')
+                    'text' => 'Это тестовое сообщение!'
                 ])
                 ->createRequest([
                     'chatId' => @$_GET['chatId']
