@@ -16,7 +16,7 @@
         /**
          * Путь к ЛОГ-файлу в который будут записываться сообщения об ошибках.
          */
-        const LOG_FILE = __DIR__ . '/log.txt';
+        const LOG_FILE = __DIR__ . '..' . DIRECTORY_SEPARATOR . 'log.txt';
 
         /**
          * Секретный токен для проверки доступа к выполнению действий.
@@ -43,9 +43,14 @@
          */
         const CURL_PROXY_URL = 'socks5://10.101.1.243:9050';
 
-        public function __construct($secretToken)
+        public function __construct($data)
         {
-            if($secretToken != self::SECRET_TOKEN)
+            if (empty($data['secretToken']) == TRUE)
+            {
+                self::writeLog('Ошибка! В программу не передан токен!', TRUE);
+            }
+
+            if($data['secretToken'] != self::SECRET_TOKEN)
             {
                 self::writeLog('Ошибка! Не удалось пройти проверку токена!', TRUE);
             }
@@ -53,26 +58,22 @@
 
         public function sendMessage()
         {
-            $request = $this->getRequest();
-
-            if(empty($request) == TRUE)
-            {
-                self::writeLog('Ошибка! Запрос еще не сформирован!', TRUE);
-            }
-
-            return $this->sendRequest($request, 'sendMessage');
+            return $this->sendRequest($this->getRequest(), 'sendMessage');
         }
 
-        public function createMessage($dataMessage)
+        public function sendPhoto()
         {
-            if(empty($dataMessage) == TRUE)
+            return $this->sendRequest($this->getRequest(), 'sendPhoto');
+        }
+
+        public function createMessage($data)
+        {
+            if(empty($data) == TRUE)
             {
                 self::writeLog('Ошибка! В программу не переданы входящие данные!', TRUE);
             }
 
-            $message = 'Это тестовое сообщение!';
-
-            $this->setMessage($message);
+            $this->setMessage('Это тестовое сообщение!');
 
             return $this;
         }
@@ -80,37 +81,36 @@
         protected function setMessage($value)
         {
             $this->_message = $value;
+
+            return $this;
         }
 
         protected function getMessage()
         {
-            return $this->_message;
-        }
-
-        public function createRequest($chatId)
-        {
-            if(empty($chatId) == TRUE)
-            {
-                self::writeLog('Ошибка! В программу не передан идентификатор чата!', TRUE);
-            }
-
-            $message = $this->getMessage();
-
-            if(empty($message) == TRUE)
+            if(empty($this->_message) == TRUE)
             {
                 self::writeLog('Ошибка! Сообщение еще не сформировано!', TRUE);
             }
 
+            return $this->_message;
+        }
+
+        public function createRequest($data)
+        {
+            if(empty($data['chatId']) == TRUE)
+            {
+                self::writeLog('Ошибка! В программу не передан идентификатор чата!', TRUE);
+            }
+
             $request = array(
-                'chat_id'    => $chatId,
-                'text'       => $message,
+                'chat_id' => $data['chatId'],
+                'text' => $this->getMessage(),
                 'parse_mode' => 'HTML',
                 'disable_web_page_preview' => TRUE,
-                'disable_notification'     => FALSE
+                'disable_notification' => FALSE
             );
 
             $request = json_encode($request);
-
             $request = str_replace('<br>', '\n', $request);
 
             $this->setRequest($request);
@@ -121,10 +121,17 @@
         protected function setRequest($value)
         {
             $this->_request = $value;
+
+            return $this;
         }
 
         protected function getRequest()
         {
+            if(empty($this->_request) == TRUE)
+            {
+                self::writeLog('Ошибка! Запрос еще не сформирован!', TRUE);
+            }
+
             return $this->_request;
         }
 
