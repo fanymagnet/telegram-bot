@@ -16,7 +16,7 @@
         /**
          * Путь к ЛОГ-файлу в который будут записываться сообщения об ошибках.
          */
-        const LOG_FILE = __DIR__ . '..' . DIRECTORY_SEPARATOR . 'log.txt';
+        const LOG_FILE = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'log.txt';
 
         /**
          * Секретный токен для проверки доступа к выполнению действий.
