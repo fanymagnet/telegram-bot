@@ -14,6 +14,11 @@
         private $_request;
 
         /**
+         * @var $telegramToken string Токен бота.
+         */
+        public $telegramToken;
+
+        /**
          * Путь к ЛОГ-файлу в который будут записываться сообщения об ошибках.
          */
         const LOG_FILE = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'log.txt';
@@ -22,12 +27,7 @@
          * Секретный токен для проверки доступа к выполнению действий.
          */
         const SECRET_TOKEN = '5d6d705343e910edace2db857d8de485';
-
-        /**
-         * Токен бота.
-         */
-        const TELEGRAM_TOKEN = '594202943:AAHNkao_EyNsUKzcqAq4ZQ3Wwu9106GUYV0';
-
+        
         /**
          * Опредляет активность прокси при отправке запросов.
          */
@@ -45,6 +45,13 @@
 
         public function __construct($data = [])
         {
+            $this->telegramToken = @file_get_contents('token.txt');
+
+            if (empty($this->telegramToken) == TRUE)
+            {
+                self::writeLog('Ошибка! В файле token.txt не прописан токен бота!', TRUE);
+            }
+
             if (empty($data['secretToken']) == TRUE)
             {
                 self::writeLog('Ошибка! В программу не передан токен!', TRUE);
@@ -134,7 +141,7 @@
         public function sendRequest($request, $method)
         {
             // В hosts-файле обязательно прописать соответсвие api.telegram.org IP адресу
-            $curlHandle = curl_init('https://api.telegram.org/bot' . self::TELEGRAM_TOKEN . '/' . $method);
+            $curlHandle = curl_init('https://api.telegram.org/bot' . $this->telegramToken . '/' . $method);
 
             if(self::CURL_PROXY_ENABLE == TRUE)
             {
