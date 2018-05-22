@@ -1,43 +1,76 @@
 <?php
+    use classes\TelegramBot;
+    use classes\GitLabTelegramBot;
+    use classes\RandomPhotoTelegramBot;
+    use classes\RandomAnekdotTelegramBot;
+
     // Автозагрузчик классов
     spl_autoload_register(function($className) {
-        include __DIR__. DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.class.php';
+        require_once __DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
     });
 
     switch(@$_GET['typeEvent'])
     {
         case 'TestBot':
-            (new classes\TelegramBot(@$_GET['secretToken']))
-                ->createMessage(file_get_contents('php://input'))
-                ->createRequest(@$_GET['chatId'])
+            (
+                new TelegramBot([
+                    'secretToken' => @$_GET['secretToken']
+                ])
+            )
+                ->createMessage([
+                    'text' => 'Это тестовое сообщение!'
+                ])
+                ->createRequest([
+                    'chatId' => @$_GET['chatId']
+                ])
                 ->sendMessage();
         break;
 
         case 'GitLab':
-            (new classes\GitLabTelegramBot(@$_SERVER['HTTP_X_GITLAB_TOKEN']))
+            (
+                new GitLabTelegramBot([
+                    'secretToken' => @$_SERVER['HTTP_X_GITLAB_TOKEN']
+                ])
+            )
                 ->createMessage([
                     'phpInput' => file_get_contents('php://input'),
                     'gitlabEvent' => @$_SERVER['HTTP_X_GITLAB_EVENT']
                 ])
-                ->createRequest(@$_GET['chatId'])
+                ->createRequest([
+                    'chatId' => @$_GET['chatId']
+                ])
                 ->sendMessage();
         break;
 
         case 'RandomPhoto':
-            (new classes\RandomPhotoTelegramBot(@$_GET['secretToken']))
-                ->createRequest(@$_GET['chatId'])
+            (
+                new RandomPhotoTelegramBot([
+                    'secretToken' => @$_GET['secretToken']
+                ])
+            )
+                ->createRequest([
+                    'chatId' => @$_GET['chatId']
+                ])
                 ->sendPhoto();
         break;
 
         case 'RandomAnekdot':
-            (new classes\RandomAnekdotTelegramBot(@$_GET['secretToken']))
-                ->createMessage(file_get_contents('php://input'))
-                ->createRequest(@$_GET['chatId'])
+            (
+                new RandomAnekdotTelegramBot([
+                    'secretToken' => @$_GET['secretToken']
+                ])
+            )
+                ->createMessage([
+                    'phpInput' => file_get_contents('php://input')
+                ])
+                ->createRequest([
+                    'chatId' => @$_GET['chatId']
+                ])
                 ->sendMessage();
         break;
 
         default:
-            classes\TelegramBot::writeLog('Ошибка! Неизвестный тип события!', TRUE);
+            TelegramBot::writeLog('Ошибка! Неизвестный тип события!', TRUE);
         break;
     }
 ?>
